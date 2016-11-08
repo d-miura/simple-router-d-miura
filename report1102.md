@@ -56,6 +56,8 @@ RoutingTable
 ###1.2 コマンドの実装
 * `/bin/simple_router`(対応部分のみ抜粋)
 ```ruby
+include Pio
+
 desc 'List the Routing Table'
 command :show_routing_table do |c|
   c.desc 'Location to find socket files'
@@ -77,8 +79,18 @@ command :show_routing_table do |c|
 end
 ```
 * `/lib/simple_router.rb`(対応部分のみ抜粋)
+```ruby
+def show_RT()
+  logger.info "show_routing_table() is called"
+  return @routing_table.list()
+end
+```
 * `/lib/routing_table.rb`(対応部分のみ抜粋)
-
+```ruby
+def list()
+  return @db, MAX_NETMASK_LENGTH
+end
+```
 
 ##2. ルーティングテーブルエントリの追加と削除
 
