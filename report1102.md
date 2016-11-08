@@ -18,13 +18,17 @@
 各サブコマンドの仕様は以下に定めた．
 
 1. ルーティングテーブルの表示
-  * `/bin/simple_router show_routing_table`
+  * [使用方法]`/bin/simple_router show_routing_table`
 1. ルーティングテーブルエントリの追加
-  * `/bin/simple_router add_entry 宛先ip ネットマスク 転送先`
+  * [使用方法]`/bin/simple_router add_entry 宛先ip ネットマスク 転送先`
+  * 宛先ip、転送先は8ビットずつ10進表記
+  * ネットマスクは数値で指定
 1. ルーティングテーブルエントリの削除
-  * `/bin/simple_router del_entry 宛先ip ネットマスク`
+  * [使用方法]`/bin/simple_router del_entry 宛先ip ネットマスク`
+  * 宛先ipは8ビットずつ10進表記
+  * ネットマスクは数値で指定
 1. ルーターのインターフェース一覧の表示
-  * `/bin/simple_router show_interface`
+  * [使用方法]`/bin/simple_router show_interface`
 
 
 
