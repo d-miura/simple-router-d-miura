@@ -13,22 +13,22 @@
 
 #解答
 ##0. コマンドの仕様
-今回の課題では，実行用のバイナリとして/bin/simple_routerを用意し，要求されたコマンドはこのバイナリに引数としてサブコマンドを与えて実行するものとした．また、コマンドの実行結果は，Trema runプロセスが実行されている端末ではなく，このバイナリが実行される端末に表示するものとした．
+今回の課題では，実行用のバイナリとして/bin/simple_routerを用意し，要求されたコマンドはこのバイナリに引数としてサブコマンドを与えて実行するものとした．また、コマンドの実行結果を表示する際は，Trema runプロセスが実行されている端末ではなく，このバイナリが実行される端末に表示するものとした．
 
 各サブコマンドの仕様は以下に定めた．
 
 1. ルーティングテーブルの表示
-  * [使用方法]`/bin/simple_router show_routing_table`
+  * 使用方法: `/bin/simple_router show_routing_table`
 1. ルーティングテーブルエントリの追加
-  * [使用方法]`/bin/simple_router add_entry 宛先ip ネットマスク 転送先`
+  * 使用方法: `/bin/simple_router add_entry [宛先ip] [ネットマスク] [転送先]`
   * 宛先ip、転送先は8ビットずつ10進表記
   * ネットマスクは数値で指定
 1. ルーティングテーブルエントリの削除
-  * [使用方法]`/bin/simple_router del_entry 宛先ip ネットマスク`
+  * 使用方法: `/bin/simple_router del_entry [宛先ip] [ネットマスク]`
   * 宛先ipは8ビットずつ10進表記
   * ネットマスクは数値で指定
 1. ルーターのインターフェース一覧の表示
-  * [使用方法]`/bin/simple_router show_interface`
+  * 使用方法: `/bin/simple_router show_interface`
 
 ##1. ルーティングテーブルの表示
 ###1.1 コマンドの設計方針
@@ -114,7 +114,7 @@ end
 
 ###2.2 コマンドの実装内容
 ###2.2.1 `/bin/simple_router`(対応部分のみ抜粋)
-* 宛先ip、転送先は文字列、ネットマスクはintでSimpleRouter#add_routing_tableを呼び出している．
+* 宛先ipと転送先は文字列、ネットマスクは整数でSimpleRouter#add_routing_table/del_routing_tableを呼び出している．
 ```ruby
 desc 'Add Entry to the Routing Table'
 arg_name 'destination_ip, netmask, forward_to'
@@ -146,6 +146,7 @@ command :del_entry do |c|
 end
 ```
 ###2.2.2 `/lib/simple_router.rb`(追加部分のみ抜粋)
+* RoutingTableクラスのインスタンスメソッドadd/delを呼び出している．
 ```ruby
 def add_routing_table(destination_ip, netmask, next_hop)
   logger.info "add_routing_table() is called"
@@ -158,6 +159,7 @@ def del_routing_table(destination_ip, netmask)
 end
 ```
 ###2.2.3 `/lib/routing_table.rb`(追加部分のみ抜粋)
+* ルーティングテーブルエントリを追加するメソッドaddはすでに定義されていたので、削除を行うメソッドdelを追加した．
 ```ruby
 def del(options)
   netmask_length = options.fetch(:netmask_length)
@@ -169,11 +171,16 @@ end
 
 ##3. ルーターのインターフェース一覧の表示
 ###3.1 コマンドの設計方針
+インターフェースは./lib/interface.rbに実装されているInterfaceクラスのインスタンスとして管理されている．
+そこで、コントローラが管理するInterfaceクラスのオブジェクトを返すメソッドshow_IFをSimpleRouterクラスに実装し、
+自作バイナリではこのメソッドを呼び出して得られたオブジェクトの内容を表示すした．
 ###3.2 コマンドの実装内容
 ###3.2.1 `/bin/simple_router`(対応部分のみ抜粋)
+* Interfaceクラスのソースコードを相対パスで指定し、読み込む
 ```ruby
 require './lib/interface'
 ```
+* Interfaceクラスのオブジェクトの内容を表示
 ```ruby
 desc 'List the Interface of Router'
 command :show_interface do |c|
@@ -191,6 +198,7 @@ command :show_interface do |c|
 end
 ```
 ###3.2.2 `/lib/simple_router.rb`(追加部分のみ抜粋)
+* Interface.allで取得したInterfaceクラスのすべてのインスタンスを返している．
 ```ruby
 def show_IF()
   logger.info "show_interface() is called"
