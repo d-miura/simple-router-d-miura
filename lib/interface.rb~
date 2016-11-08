@@ -49,4 +49,5 @@ class Interface
   def netmask
     IPv4Address.new('255.255.255.255').mask(netmask_length)
   end
+
 end

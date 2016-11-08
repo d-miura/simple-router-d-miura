@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler'
+Bundler.setup :default
+
+require 'gli'
+require 'trema'
+
+# simple_router command
+module SimpleRouterApp
+  extend GLI::App
+
+  desc 'Show the Routing Table'
+  command :create do |c|
+    c.desc 'Location to find socket files'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+
+    c.action do |_global_options, options, args|
+      Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+        show_routing_table()
+    end
+  end
+
+  desc 'Add Entry to the Routing Table'
+  arg_name 'destination_ip, netmask, forward_to'
+  command :create do |c|
+    c.desc 'Location to find socket files'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+
+    c.action do |_global_options, options, args|
+      destination_ip = args[0]
+      netmask = args[1].to_i
+      forward_to = args[2].to_i
+      Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+        add_routing_table(destination_ip, netmask, forward_to)
+    end
+  end
+
+  desc 'Delete Entry to the Routing Table'
+  arg_name 'destination_ip, netmask, forward_to'
+  command :create do |c|
+    c.desc 'Location to find socket files'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+
+    c.action do |_global_options, options, args|
+      destination_ip = args[0]
+      netmask = args[1].to_i
+      forward_to = args[2].to_i
+      Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+        del_routing_table(destination_ip, netmask, forward_to)
+    end
+  end
+
+  desc 'List the Interface of Router'
+  command :create do |c|
+    c.desc 'Location to find socket files'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+
+    c.action do |_global_options, options, args|
+      Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+        show_interface()
+    end
+  end
+
+
+  exit run(ARGV)
+end

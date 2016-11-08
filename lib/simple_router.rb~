@@ -102,7 +102,7 @@ class SimpleRouter < Trema::Controller
   # rubocop:disable MethodLength
   def add_routing_table(destination_ip, netmask, next_hop)
     logger.info "add_routing_table() is called"
-    @routing_table.add({:destination => destination_ip, :netmask_length => netmask, :next_hop => next_hop})
+    @routing_table.add(Hash.new({:destination => destination_ip, :netmask_length => netmask}))
   end
   # rubocop:enable MethodLength
 
