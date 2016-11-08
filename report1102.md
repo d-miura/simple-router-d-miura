@@ -108,6 +108,10 @@ end
 ###2.1 コマンドの設計方針
 エントリの追加に関しては、RoutingTableクラスにこの処理を行うメソッドaddがすでにソースコード(/lib/routing_table.rb)に記載されているので、このメソッドを自作バイナリから呼び出す処理を追加した．また、エントリの削除もこのメソッドを参考にして追加した．
 
+コマンド実行時の呼び出し関係を以下の図に示す．
+
+![図2](https://github.com/handai-trema/simple-router-d-miura/blob/master/fig2.png)
+
 ###2.2 コマンドの実装内容
 ###2.2.1 `/bin/simple_router`(対応部分のみ抜粋)
 * 宛先ip、転送先は文字列、ネットマスクはintでSimpleRouter#add_routing_tableを呼び出している．
