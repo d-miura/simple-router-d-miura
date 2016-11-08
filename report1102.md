@@ -40,6 +40,7 @@ RoutingTableクラスのインスタンスはTrema runプロセスによって�
 * `/lib/routing_table.rb`: @dbとネットマスクの最大値を返すメソッドlist()を実装
 
 コマンド実行時の呼び出し関係を以下の図に示す．
+
 ![図１](https://github.com/handai-trema/simple-router-d-miura/blob/master/fig1.png)
 
 <!--
@@ -105,8 +106,11 @@ end
 
 ##2. ルーティングテーブルエントリの追加と削除
 ###2.1 コマンドの設計方針
+エントリの追加に関しては、RoutingTableクラスにこの処理を行うメソッドaddがすでにソースコード(/lib/routing_table.rb)に記載されているので、このメソッドを自作バイナリから呼び出す処理を追加した．また、エントリの削除もこのメソッドを参考にして追加した．
+
 ###2.2 コマンドの実装内容
-* `/bin/simple_router`(対応部分のみ抜粋)
+###2.2.1 `/bin/simple_router`(対応部分のみ抜粋)
+* 宛先ip、転送先は文字列、ネットマスクはintでSimpleRouter#add_routing_tableを呼び出している．
 ```ruby
 desc 'Add Entry to the Routing Table'
 arg_name 'destination_ip, netmask, forward_to'
@@ -137,7 +141,7 @@ command :del_entry do |c|
   end
 end
 ```
-* `/lib/simple_router.rb`(追加部分のみ抜粋)
+###2.2.2 `/lib/simple_router.rb`(追加部分のみ抜粋)
 ```ruby
 def add_routing_table(destination_ip, netmask, next_hop)
   logger.info "add_routing_table() is called"
@@ -149,7 +153,7 @@ def del_routing_table(destination_ip, netmask)
   @routing_table.del({:destination => destination_ip, :netmask_length => netmask})
 end
 ```
-* `/lib/routing_table.rb`(追加部分のみ抜粋)
+###2.2.3 `/lib/routing_table.rb`(追加部分のみ抜粋)
 ```ruby
 def del(options)
   netmask_length = options.fetch(:netmask_length)
@@ -162,7 +166,7 @@ end
 ##3. ルーターのインターフェース一覧の表示
 ###3.1 コマンドの設計方針
 ###3.2 コマンドの実装内容
-* `/bin/simple_router`(対応部分のみ抜粋)
+###3.2.1 `/bin/simple_router`(対応部分のみ抜粋)
 ```ruby
 require './lib/interface'
 ```
@@ -182,7 +186,7 @@ command :show_interface do |c|
   end
 end
 ```
-* `/lib/simple_router.rb`(追加部分のみ抜粋)
+###3.2.2 `/lib/simple_router.rb`(追加部分のみ抜粋)
 ```ruby
 def show_IF()
   logger.info "show_interface() is called"
