@@ -32,7 +32,7 @@
 
 ##1. ルーティングテーブルの表示
 ###1.1 コマンドの設計方針
-取得したいルーティングテーブルの情報はRoutingTableクラス(/lib/routing_table.rbで実装)のインスタンス変数@dbで管理されているので、この情報を表示するようにコマンドを設計する．
+取得したいルーティングテーブルの情報はRoutingTableクラス(/lib/routing_table.rbで実装)のインスタンス変数@dbで管理されているので、この情報を表示するようにコマンドを設計する．  
 RoutingTableクラスのインスタンスはTrema runプロセスによって起動されるSimpleRouterクラスのインスタンス(/lib/simple_router.rbで実装)がインスタンス変数@routing_tableとして管理しているので、以下の処理を各ファイルに実装した．
 
 * `/bin/simple_router`   : SimpleRouter#show_RT()を呼び出すコマンドshow_routing_tableを実装
@@ -58,8 +58,8 @@ RoutingTable
 
 
 ###1.2 コマンドの実装内容
-* `/bin/simple_router`(対応部分のみ抜粋)
-IPv4Addressクラスを利用するため、Pioをincludeした．
+* `/bin/simple_router`(対応部分のみ抜粋)  
+IPv4Addressクラスを利用するため、Pioをincludeした．  
 ```ruby
 include Pio
 ```
@@ -86,7 +86,7 @@ command :show_routing_table do |c|
 end
 ```
 
-* `/lib/simple_router.rb`(追加部分のみ抜粋)
+* `/lib/simple_router.rb`(追加部分のみ抜粋)  
 RoutingTableクラスのインスタンス変数@routing_tableのインスタンスメソッドlistの結果を返すメソッドshow_RTを追加した．
 ```ruby
 def show_RT()
@@ -94,7 +94,7 @@ def show_RT()
   return @routing_table.list()
 end
 ```
-* `/lib/routing_table.rb`(追加部分のみ抜粋)
+* `/lib/routing_table.rb`(追加部分のみ抜粋)  
 ルーティングテーブルの内容であるインスタンス変数@dbとネットマスクの最大長を返すメソッドlistを追加した
 ```ruby
 def list()
