@@ -35,13 +35,17 @@
 取得したいルーティングテーブルの情報はRoutingTableクラス(/lib/routing_table.rbで実装)のインスタンス変数@dbで管理されているので、この情報を表示するようにコマンドを設計する．
 RoutingTableクラスのインスタンスはTrema runプロセスによって起動されるSimpleRouterクラスのインスタンス(/lib/simple_router.rbで実装)がインスタンス変数@routing_tableとして管理しているので、以下の処理を各ファイルに実装した．
 
-* /lib/routing_table.rb: @dbとネットマスクの最大値を返すメソッドlist()を実装
-* /lib/simple_router.rb: RoutingTable#list()を呼び出すメソッドshow_RT()を実装
-* /bin/simple_router   : SimpleRouter#show_RT()を呼び出すコマンドshow_routing_tableを実装
+* `/bin/simple_router`   : SimpleRouter#show_RT()を呼び出すコマンドshow_routing_tableを実装
+* `/lib/simple_router.rb`: RoutingTable#list()を呼び出すメソッドshow_RT()を実装
+* `/lib/routing_table.rb`: @dbとネットマスクの最大値を返すメソッドlist()を実装
 
 コマンド実行時の呼び出し関係は以下のようになる．
+1. 実行用バイナリ/bin/simple_router(自作)がTrema runプロセスによって起動されるSimpleRouterクラスのインスタンスが持つshow_RTメソッドを呼び出す
+2. SimpleRouterクラスのshow_RTメソッドがRoutingTableクラスのインスタンス変数@routing_tableのインスタンスメソッドlistを呼び出す
+3.
 
-実行用バイナリ/bin/simple_router(自作)　⑤ルーティングテーブルの内容を表示  
+
+⑤ルーティングテーブルの内容を表示  
 ↓①SimpleRouter#show_RT()  ↑④ルーティングテーブルの内容、最大マスク長  
 Trema runプロセスによって起動されるSimpleRouter  
 ↓②RoutingTable#list()     ↑③ルーティングテーブルの内容、最大マスク長  
@@ -50,6 +54,31 @@ RoutingTable
 
 
 ###1.2 コマンドの実装
+* `/bin/simple_router`(対応部分のみ抜粋)
+```ruby
+desc 'List the Routing Table'
+command :show_routing_table do |c|
+  c.desc 'Location to find socket files'
+  c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+  c.action do |_global_options, options, args|
+
+    @db, @length = Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+      show_RT()
+
+    print "destination \t\t  next hop\n"
+
+    @length.downto(0).each do |eachMask|
+      @db[eachMask].each do |dest, next_hop|
+        print IPv4Address.new(dest).to_s+"/"+eachMask.to_s+"\t\t"+next_hop.to_s+"\n"
+      end
+    end
+
+  end
+end
+```
+* `/lib/simple_router.rb`(対応部分のみ抜粋)
+* `/lib/routing_table.rb`(対応部分のみ抜粋)
+
 
 ##2. ルーティングテーブルエントリの追加と削除
 
