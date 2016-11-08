@@ -17,13 +17,17 @@
 
 各サブコマンドの仕様は以下に定めた．
 1. ルーティングテーブルの表示
-  `/bin/simple_router show_routing_table`
+  * `/bin/simple_router show_routing_table`
 1. ルーティングテーブルエントリの追加
-  `/bin/simple_router add_entry 宛先ip ネットマスク 転送先`
+  * `/bin/simple_router add_entry 宛先ip ネットマスク 転送先`
 1. ルーティングテーブルエントリの削除
-  `/bin/simple_router del_entry 宛先ip ネットマスク`
+  * `/bin/simple_router del_entry 宛先ip ネットマスク`
 1. ルーターのインターフェース一覧の表示
-  `/bin/simple_router show_interface`
+  * `/bin/simple_router show_interface`
+
+
+
+
 
 ##1. ルーティングテーブルの表示
 ###1.1 コマンドの設計方針
