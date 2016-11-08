@@ -57,7 +57,8 @@ RoutingTable
 * `/bin/simple_router`(対応部分のみ抜粋)
 ```ruby
 include Pio
-
+```
+```ruby
 desc 'List the Routing Table'
 command :show_routing_table do |c|
   c.desc 'Location to find socket files'
@@ -148,6 +149,9 @@ end
 ###3.1 コマンドの設計方針
 ###3.2 コマンドの実装内容
 * `/bin/simple_router`(対応部分のみ抜粋)
+```ruby
+require './lib/interface'
+```
 ```ruby
 desc 'List the Interface of Router'
 command :show_interface do |c|
