@@ -53,7 +53,7 @@ RoutingTable
 
 
 
-###1.2 コマンドの実装
+###1.2 コマンドの実装内容
 * `/bin/simple_router`(対応部分のみ抜粋)
 ```ruby
 include Pio
@@ -91,7 +91,84 @@ def list()
   return @db, MAX_NETMASK_LENGTH
 end
 ```
+###1.3 実行結果
 
 ##2. ルーティングテーブルエントリの追加と削除
+###2.1 コマンドの設計方針
+###2.2 コマンドの実装内容
+* `/bin/simple_router`(対応部分のみ抜粋)
+```ruby
+desc 'Add Entry to the Routing Table'
+arg_name 'destination_ip, netmask, forward_to'
+command :add_entry do |c|
+  c.desc 'Location to find socket files'
+  c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+
+  c.action do |_global_options, options, args|
+    destination_ip = args[0]
+    netmask = args[1].to_i
+    next_hop = args[2]
+    Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+      add_routing_table(destination_ip, netmask, next_hop)
+  end
+end
+
+desc 'Delete Entry to the Routing Table'
+arg_name 'destination_ip, netmask, forward_to'
+command :del_entry do |c|
+  c.desc 'Location to find socket files'
+  c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+
+  c.action do |_global_options, options, args|
+    destination_ip = args[0]
+    netmask = args[1].to_i
+    Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+      del_routing_table(destination_ip, netmask)
+  end
+end
+```
+* `/lib/simple_router.rb`(対応部分のみ抜粋)
+```ruby
+def add_routing_table(destination_ip, netmask, next_hop)
+  logger.info "add_routing_table() is called"
+  @routing_table.add({:destination => destination_ip, :netmask_length => netmask, :next_hop => next_hop})
+end
+
+def del_routing_table(destination_ip, netmask)
+  logger.info "del_routing_table() is called"
+  @routing_table.del({:destination => destination_ip, :netmask_length => netmask})
+end
+```
+* `/lib/routing_table.rb`(対応部分のみ抜粋)
+```ruby
+```
+###2.3 コマンドの実行結果
 
 ##3. ルーターのインターフェース一覧の表示
+###3.1 コマンドの設計方針
+###3.2 コマンドの実装内容
+* `/bin/simple_router`(対応部分のみ抜粋)
+```ruby
+desc 'List the Interface of Router'
+command :show_interface do |c|
+  c.desc 'Location to find socket files'
+  c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+  c.action do |_global_options, options, args|
+    interfaces = Trema.trema_process('SimpleRouter', options[:socket_dir])
+                      .controller
+                      .show_IF()
+    print "port_number\tmac_address\t\tip_address/netmask\n"
+    interfaces.each do |each|
+      print each.port_number.to_s+"\t\t"+each.mac_address.to_s+"\t"+each.ip_address.to_s+"/"+each.netmask_length.to_s+"\n"
+    end
+  end
+end
+```
+* `/lib/simple_router.rb`(対応部分のみ抜粋)
+```ruby
+def show_IF()
+  logger.info "show_interface() is called"
+  return Interface.all
+end
+```
+###3.3 コマンドの実行結果
