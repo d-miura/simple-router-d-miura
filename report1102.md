@@ -39,7 +39,7 @@ RoutingTableクラスのインスタンスはTrema runプロセスによって�
 * `/lib/simple_router.rb`: RoutingTable#list()を呼び出すメソッドshow_RT()を実装
 * `/lib/routing_table.rb`: @dbとネットマスクの最大値を返すメソッドlist()を実装
 
-コマンド実行時の呼び出し関係を以下の図1に示す．
+コマンド実行時の呼び出し関係を以下の図に示す．
 ![図１](https://github.com/handai-trema/simple-router-d-miura/blob/master/fig1.png)
 
 <!--
@@ -59,9 +59,11 @@ RoutingTable
 
 ###1.2 コマンドの実装内容
 * `/bin/simple_router`(対応部分のみ抜粋)
+IPv4Addressクラスを利用するため、Pioをincludeした．
 ```ruby
 include Pio
 ```
+SimpleRouter#show_RT()で取得したルーティングテーブルの内容を表示する処理を記述した．
 ```ruby
 desc 'List the Routing Table'
 command :show_routing_table do |c|
@@ -83,7 +85,9 @@ command :show_routing_table do |c|
   end
 end
 ```
+
 * `/lib/simple_router.rb`(追加部分のみ抜粋)
+RoutingTableクラスのインスタンス変数@routing_tableのインスタンスメソッドlistの結果を返すメソッドshow_RTを追加した．
 ```ruby
 def show_RT()
   logger.info "show_routing_table() is called"
@@ -91,6 +95,7 @@ def show_RT()
 end
 ```
 * `/lib/routing_table.rb`(追加部分のみ抜粋)
+ルーティングテーブルの内容であるインスタンス変数@dbとネットマスクの最大長を返すメソッドlistを追加した
 ```ruby
 def list()
   return @db, MAX_NETMASK_LENGTH
