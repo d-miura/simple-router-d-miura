@@ -41,10 +41,10 @@ RoutingTableクラスのインスタンスはTrema runプロセスによって�
 
 コマンド実行時の呼び出し関係は以下のようになる．
 
-実行用バイナリ/bin/simple_router(自作)　⑤ルーティングテーブルの内容を表示
-↓①SimpleRouter#show_RT()  ↑④ルーティングテーブルの内容、最大マスク長
-Trema runプロセスによって起動されるSimpleRouter
-↓②RoutingTable#list()     ↑③ルーティングテーブルの内容、最大マスク長
+実行用バイナリ/bin/simple_router(自作)　⑤ルーティングテーブルの内容を表示  
+↓①SimpleRouter#show_RT()  ↑④ルーティングテーブルの内容、最大マスク長  
+Trema runプロセスによって起動されるSimpleRouter  
+↓②RoutingTable#list()     ↑③ルーティングテーブルの内容、最大マスク長  
 RoutingTable
 
 
