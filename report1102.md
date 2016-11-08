@@ -174,6 +174,11 @@ end
 インターフェースは./lib/interface.rbに実装されているInterfaceクラスのインスタンスとして管理されている．
 そこで、コントローラが管理するInterfaceクラスのオブジェクトを返すメソッドshow_IFをSimpleRouterクラスに実装し、
 自作バイナリではこのメソッドを呼び出して得られたオブジェクトの内容を表示すした．
+
+コマンド実行時の呼び出し関係を以下の図に示す．
+
+![図3](https://github.com/handai-trema/simple-router-d-miura/blob/master/fig3.png)
+
 ###3.2 コマンドの実装内容
 ###3.2.1 `/bin/simple_router`(対応部分のみ抜粋)
 * Interfaceクラスのソースコードを相対パスで指定し、読み込む
