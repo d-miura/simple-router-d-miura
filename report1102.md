@@ -15,15 +15,25 @@
 ##0. コマンドの仕様
 今回の課題では，実行用のバイナリとして/bin/simple_routerを用意し，要求されたコマンドはこのバイナリに引数としてサブコマンドを与えて実行するものとした．コマンドの実行結果は，Trema runプロセスが実行されている端末ではなく，このバイナリが実行される端末に表示するものとした．
 
+各サブコマンドの仕様は以下に定めた．
+1. ルーティングテーブルの表示
+  `/bin/simple_router show_routing_table`
+1. ルーティングテーブルエントリの追加
+  `/bin/simple_router add_entry 宛先ip ネットマスク 転送先`
+1. ルーティングテーブルエントリの削除
+  `/bin/simple_router del_entry 宛先ip ネットマスク`
+1. ルーターのインターフェース一覧の表示
+  `/bin/simple_router show_interface`
+
 ##1. ルーティングテーブルの表示
 ###1.1 コマンドの設計方針
 ルーティングテーブルの情報はRoutingTableクラス(/lib/routing_table.rbに実装)のインスタンス変数@dbで管理されているので，この情報を表示するコマンドを作成する．
 
-RoutingTableクラスはSimpleRouterクラス(/lib/simple_router.rbにて実装)がインスタンス変数@routing_tableとしてインスタンス化して管理しているので，
+RoutingTableクラスはSimpleRouterクラス(/lib/simple_router.rbにて実装)がインスタンス変数@routing_tableとしてインスタンス化して管理しているため、コマンド実行時の呼び出し関係は以下のようになる．
 
-* 実行用バイナリ
-*
-*
+実行用バイナリ
+
+
 
 
 ###1.2 コマンドの実装
