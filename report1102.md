@@ -58,12 +58,12 @@ RoutingTable
 
 
 ###1.2 コマンドの実装内容
-* `/bin/simple_router`(対応部分のみ抜粋)  
-IPv4Addressクラスを利用するため、Pioをincludeした．  
+###1.2.1 `/bin/simple_router`(対応部分のみ抜粋)  
+* IPv4Addressクラスを利用するため、Pioをincludeした．  
 ```ruby
 include Pio
 ```
-SimpleRouter#show_RT()で取得したルーティングテーブルの内容を表示する処理を記述した．
+* SimpleRouter#show_RT()で取得したルーティングテーブルの内容を表示する処理を記述した．
 ```ruby
 desc 'List the Routing Table'
 command :show_routing_table do |c|
@@ -86,16 +86,16 @@ command :show_routing_table do |c|
 end
 ```
 
-* `/lib/simple_router.rb`(追加部分のみ抜粋)  
-RoutingTableクラスのインスタンス変数@routing_tableのインスタンスメソッドlistの結果を返すメソッドshow_RTを追加した．
+###1.2.2 `/lib/simple_router.rb`(追加部分のみ抜粋)  
+* RoutingTableクラスのインスタンス変数@routing_tableのインスタンスメソッドlistの結果を返すメソッドshow_RTを追加した．
 ```ruby
 def show_RT()
   logger.info "show_routing_table() is called"
   return @routing_table.list()
 end
 ```
-* `/lib/routing_table.rb`(追加部分のみ抜粋)  
-ルーティングテーブルの内容であるインスタンス変数@dbとネットマスクの最大長を返すメソッドlistを追加した
+###1.2.3 `/lib/routing_table.rb`(追加部分のみ抜粋)  
+* ルーティングテーブルの内容であるインスタンス変数@dbとネットマスクの最大長を返すメソッドlistを追加した
 ```ruby
 def list()
   return @db, MAX_NETMASK_LENGTH
